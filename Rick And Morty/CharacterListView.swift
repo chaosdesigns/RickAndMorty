@@ -17,6 +17,9 @@ struct CharacterListView: View {
 			List {
 				ForEach(model.characters) { character in
 					CharacterListCell(character: character)
+						.onAppear() {
+							model.fetchMoreCharactersIfNeeded(currentCharacter: character)
+						}
 				}
 			}
 			.listStyle(PlainListStyle())	// and  GroupedListStyle and InsetListStyle  pushes the left and right boundaries out!
