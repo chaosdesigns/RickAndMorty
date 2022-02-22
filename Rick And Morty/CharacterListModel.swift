@@ -35,8 +35,8 @@ class CharacterListModel: ObservableObject {
 			return
 		}
 
-		// determine if we need to load more content...(2 rows before needed)
-		let thresholdIndex = characters.index(characters.endIndex, offsetBy: -2)
+		// determine if we need to load more content...(10 rows before needed)
+		let thresholdIndex = characters.index(characters.endIndex, offsetBy: -10)
 		if characters.firstIndex(where: { $0.id == character.id }) == thresholdIndex {
 			fetchMoreCharacters()
 		}
