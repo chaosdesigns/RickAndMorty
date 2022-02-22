@@ -73,7 +73,9 @@ class CharacterListModel: ObservableObject {
 				for characterJ in response.results {	// loop through characters loaded (these are CharacterJson recs)
 					var characterInfo = CharacterRec()	// create a character record
 					characterInfo.setFromCharacterJson(characterJson:characterJ)
+					let nextIndex = self.characters.count
 					self.characters.append(characterInfo)	// add it to our array (in 'nextIndex' position
+					self.requestAvatarForCharacterIndex(nextIndex)
 				}
 				return self.characters
 			})
@@ -82,6 +84,37 @@ class CharacterListModel: ObservableObject {
 			})
 			.assign(to: &$characters)
 	}
+
+	//_________________________________________________________
+	func requestAvatarForCharacterIndex(_ index: Int) {
+		if (index >= self.characters.count) {
+			return
+		}
+
+		if self.characters[index].avatar != nil {
+			return
+		}
+
+		let url = URL(string: self.characters[index].avatar_url)!
+		getData(from: url) { optData, response, error in
+			guard let imageData = optData else {
+				return
+			}
+
+			// always update the UI from the main thread
+			DispatchQueue.main.async() { [weak self] in
+				//convert the return data into an image
+				let uiImage: UIImage? = UIImage(data: imageData)
+				self?.characters[index].avatar = uiImage
+			}
+		}
+	}
+
+	//_________________________________________________________
+	func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+		URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+	}
+
 }
 
 
