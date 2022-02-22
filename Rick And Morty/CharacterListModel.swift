@@ -22,9 +22,66 @@ class CharacterListModel: ObservableObject {
 
 	//_________________________________________________________
 	init() {
-		characters = testCharacters
+		//characters = testCharacters
+		fetchMoreCharacters()
 	}
 
+	//_________________________________________________________
+	func fetchMoreCharactersIfNeeded(currentCharacter character: CharacterRec?) {
+
+		guard let character = character else {
+			// if we dont have a character, we need to load the next page
+			fetchMoreCharacters()
+			return
+		}
+
+		// determine if we need to load more content...(2 rows before needed)
+		let thresholdIndex = characters.index(characters.endIndex, offsetBy: -2)
+		if characters.firstIndex(where: { $0.id == character.id }) == thresholdIndex {
+			fetchMoreCharacters()
+		}
+	}
+
+	//_________________________________________________________
+	private func fetchMoreCharacters() {
+		guard !isLoadingPage && canLoadMorePages else {
+			return	// already loading... exit
+		}
+
+		isLoadingPage = true
+
+		// load a page of users
+		loadUsingDataTaskPublisher(pageNum: self.currentPage)
+	}
+
+	//_________________________________________________________
+	func loadUsingDataTaskPublisher(pageNum: Int) {
+		// this is a magical function!
+		let url = URL(string: "https://rickandmortyapi.com/api/character/?page=\(pageNum+1)")!	// remember... the pageNum in the URL is 1-based
+		URLSession.shared.dataTaskPublisher(for: url)
+			.map(\.data)											// convert the contents of this tuple to another type.
+			.decode(type: CharacterPageJson.self, decoder: JSONDecoder())	// convert raw data received to our types (in this case a CharacterPageJson)
+			.eraseToAnyPublisher()
+			.receive(on: DispatchQueue.main)						// receive on the main thread
+			.handleEvents(receiveOutput: { data in
+				self.canLoadMorePages = data.info.next != nil
+				self.isLoadingPage = false
+				self.currentPage += 1
+			})
+			.map({ response in
+				// process the user records in the response.data array
+				for characterJ in response.results {	// loop through characters loaded (these are CharacterJson recs)
+					var characterInfo = CharacterRec()	// create a character record
+					characterInfo.setFromCharacterJson(characterJson:characterJ)
+					self.characters.append(characterInfo)	// add it to our array (in 'nextIndex' position
+				}
+				return self.characters
+			})
+			.catch({ error in
+				Just(self.characters)	// just once
+			})
+			.assign(to: &$characters)
+	}
 }
 
 

@@ -21,6 +21,18 @@ struct CharacterRec: Identifiable {
 	var avatar: UIImage? = nil
 	var created: Date? = nil
 
+	//__________________________________________________________________________
+	mutating func setFromCharacterJson(characterJson: CharacterJson) {
+		self.id = characterJson.id != 0 ? "\(characterJson.id)" : UUID().uuidString
+		self.name = characterJson.name
+		self.status = characterJson.status
+		self.species = characterJson.species
+		self.gender = characterJson.gender
+		self.location = characterJson.location.name
+		self.episodes = characterJson.episode.count
+		self.avatar_url = characterJson.image
+		self.created = Date()	// for now. convert from timestamp later
+	}
 }
 
 // structs for mapping incomming json
