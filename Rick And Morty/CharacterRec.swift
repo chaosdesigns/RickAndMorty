@@ -42,16 +42,16 @@ struct CharacterJson: Decodable, Identifiable {
 
 //__________________________________________________________________________
 struct LocationInfoJson: Decodable {
-	var name: Int
-	var url: Int
+	var name: String
+	var url: String
 }
 
 //__________________________________________________________________________
 struct PageInfoJson: Decodable {
 	var count: Int
 	var pages: Int
-	var next: String
-	var prev: String
+	var next: String?
+	var prev: String?
 }
 
 //__________________________________________________________________________
