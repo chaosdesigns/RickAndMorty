@@ -13,6 +13,7 @@
 		1FE0081427C54D07006C139F /* CharacterListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0081327C54D07006C139F /* CharacterListModel.swift */; };
 		1FE0081627C54D1A006C139F /* CharacterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0081527C54D1A006C139F /* CharacterListView.swift */; };
 		1FE0081827C5551F006C139F /* CharacterRec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0081727C5551F006C139F /* CharacterRec.swift */; };
+		1FE0081A27C5771D006C139F /* CharacterProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0081927C5771D006C139F /* CharacterProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		1FE0081327C54D07006C139F /* CharacterListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListModel.swift; sourceTree = "<group>"; };
 		1FE0081527C54D1A006C139F /* CharacterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListView.swift; sourceTree = "<group>"; };
 		1FE0081727C5551F006C139F /* CharacterRec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterRec.swift; sourceTree = "<group>"; };
+		1FE0081927C5771D006C139F /* CharacterProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +58,10 @@
 			isa = PBXGroup;
 			children = (
 				1FE0080527C54B63006C139F /* Rick_And_MortyApp.swift */,
+				1FE0081527C54D1A006C139F /* CharacterListView.swift */,
 				1FE0081327C54D07006C139F /* CharacterListModel.swift */,
 				1FE0081727C5551F006C139F /* CharacterRec.swift */,
-				1FE0081527C54D1A006C139F /* CharacterListView.swift */,
+				1FE0081927C5771D006C139F /* CharacterProfileView.swift */,
 				1FE0080927C54B65006C139F /* Assets.xcassets */,
 				1FE0080B27C54B65006C139F /* Preview Content */,
 			);
@@ -144,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FE0081427C54D07006C139F /* CharacterListModel.swift in Sources */,
+				1FE0081A27C5771D006C139F /* CharacterProfileView.swift in Sources */,
 				1FE0081627C54D1A006C139F /* CharacterListView.swift in Sources */,
 				1FE0080627C54B63006C139F /* Rick_And_MortyApp.swift in Sources */,
 				1FE0081827C5551F006C139F /* CharacterRec.swift in Sources */,

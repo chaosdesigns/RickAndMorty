@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct CharacterProfileView: View {
-    var body: some View {
+	var character: CharacterRec
+
+	var body: some View {
         Text("Character Profile")
     }
 }
 
 struct CharacterProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        CharacterProfileView()
+        CharacterProfileView(character: testCharacters[0])
     }
 }

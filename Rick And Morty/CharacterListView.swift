@@ -29,9 +29,9 @@ struct CharacterListView: View {
 					}
 				}
 			}
-			.sheet(isPresented: $showingAbout) {
-				AboutView()
-			}
+		}
+		.sheet(isPresented: $showingAbout) {
+			AboutView()
 		}
 	}
 }
@@ -41,37 +41,25 @@ struct CharacterListCell: View {
 	var character: CharacterRec
 
 	var body: some View {
-		HStack {
-			IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!  , size: 60.0)
+		NavigationLink(destination: CharacterProfileView(character: character)) {
+			HStack {
+				IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!  , size: 60.0)
 
-			VStack(alignment: .leading) {
-				Text("\(character.name)")
-					.font(.body)
-					.fontWeight(.bold)
-					.padding(.horizontal)
+				VStack(alignment: .leading) {
+					Text("\(character.name)")
+						.font(.body)
+						.fontWeight(.bold)
+						.padding(.horizontal)
 
-				Text("Episodes: \(character.episodes)")
-					.font(.caption)
-					.foregroundColor(.secondary)
-					.padding(.horizontal)
+					Text("Episodes: \(character.episodes)")
+						.font(.caption)
+						.foregroundColor(.secondary)
+						.padding(.horizontal)
+				}
+
+				Spacer()
 			}
-
-			Spacer()
 		}
-	}
-}
-
-//_________________________________________________________
-struct IconView : View {
-	var image: UIImage
-	var size: CGFloat
-
-	var body: some View {
-		return Image(uiImage: image)
-			.resizable()
-			.aspectRatio(contentMode: .fit)
-			.frame(width: size, height: size)
-			.cornerRadius(16)
 	}
 }
 
@@ -114,6 +102,20 @@ struct CloseButtonView : View {
 			.frame(width: 150, height: 50)
 			.background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .top, endPoint: .bottom))
 			.cornerRadius(15.0)
+	}
+}
+
+//_________________________________________________________
+struct IconView : View {
+	var image: UIImage
+	var size: CGFloat
+
+	var body: some View {
+		return Image(uiImage: image)
+			.resizable()
+			.aspectRatio(contentMode: .fit)
+			.frame(width: size, height: size)
+			.cornerRadius(16)
 	}
 }
 
