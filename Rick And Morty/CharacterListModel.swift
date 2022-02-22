@@ -6,3 +6,25 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
+
+//_________________________________________________________
+class CharacterListModel: ObservableObject {
+	@Published var characters = [CharacterRec]()
+	@Published var isLoadingPage = false
+
+	private var currentPage = 0
+	private var totalPages = 0
+	private var canLoadMorePages = true
+
+	static var shared = CharacterListModel()
+
+	//_________________________________________________________
+	init() {
+		characters = testCharacters
+	}
+
+}
+
+
