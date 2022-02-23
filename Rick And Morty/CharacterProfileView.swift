@@ -13,7 +13,7 @@ struct CharacterProfileView: View {
 
 	var body: some View {
 		VStack {
-			IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!, size: 280.0)
+			IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!, size: 320.0)
 				.padding(.top, 20)
 
 			Text("\(character.name)")
@@ -48,9 +48,9 @@ struct InfoView: View {
 			Text(value)
 		}
 		.font(.body)
-		.padding(.horizontal, 30)
-		.padding(.vertical, 10)
+		.padding(6)
 		.background(LinearGradient(gradient: Gradient(colors: [leadingColor, trailingColor]), startPoint: .leading, endPoint: .trailing))
+		.padding(.horizontal, 32)
 	}
 }
 
