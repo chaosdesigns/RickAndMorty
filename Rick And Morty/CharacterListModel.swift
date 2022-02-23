@@ -13,20 +13,8 @@ import SwiftUI
 class CharacterListModel: ObservableObject {
 	@Published var characters = [CharacterRec]()
 	@Published var characterCount = 0
-	@Published var isLoadingPage = false {
-		didSet {
-			if isLoadingPage == false && pendingFetch == true {
-				changeFetchParameters()
-			}
-		}
-	}
-	@Published var searchText = "" {
-		didSet {
-			changeFetchParameters()
-		}
-	}
-	private var pendingFetch = false;
-
+	@Published var isLoadingPage = false
+	@Published var searchText = ""
 	private var currentPage = 0
 	private var canLoadMorePages = true
 
@@ -38,13 +26,12 @@ class CharacterListModel: ObservableObject {
 	}
 
 	//_________________________________________________________
+	// called when the searchText changes to reload the list with
+	// characters that match the user's search parameter
 	func changeFetchParameters() {
-
 		guard !isLoadingPage else {
-			self.pendingFetch = true
 			return
 		}
-		self.pendingFetch = false
 		self.characters = [CharacterRec]()
 		self.characterCount = 0
 		self.currentPage = 0
@@ -53,6 +40,8 @@ class CharacterListModel: ObservableObject {
 	}
 
 	//_________________________________________________________
+	// called when a character list cell is displayed
+	// this determines if more characters need to be loaded (soon)
 	func fetchMoreCharactersIfNeeded(currentCharacter character: CharacterRec?) {
 		guard let character = character else {
 			// if we dont have a character, we need to load the next page
@@ -60,14 +49,16 @@ class CharacterListModel: ObservableObject {
 			return
 		}
 
-		// determine if we need to load more content...(10 rows before needed)
-		let thresholdIndex = characters.index(characters.endIndex, offsetBy: -10)
+		// determine if we need to load more content...
+		let rowsBeforeLoading = -10	// ...(10 rows before needed)
+		let thresholdIndex = characters.index(characters.endIndex, offsetBy: rowsBeforeLoading)
 		if characters.firstIndex(where: { $0.id == character.id }) == thresholdIndex {
 			fetchMoreCharacters()
 		}
 	}
 
 	//_________________________________________________________
+	// begins and continues the loading of pages of characters
 	private func fetchMoreCharacters() {
 		guard !isLoadingPage && canLoadMorePages else {
 			return	// already loading... exit
@@ -80,8 +71,8 @@ class CharacterListModel: ObservableObject {
 	}
 
 	//_________________________________________________________
+	// called to load a page of characters and process them into the character array
 	func loadUsingDataTaskPublisher(pageNum: Int) {
-		// this is a magical function!
 		var urlString = "https://rickandmortyapi.com/api/character/?page=\(pageNum+1)"	// remember... the pageNum in the URL is 1-based
 		if !self.searchText.isEmpty {
 			urlString += "&name=\(self.searchText)"
@@ -95,16 +86,17 @@ class CharacterListModel: ObservableObject {
 			return
 		}
 
+		// this is a magical function!
 		URLSession.shared.dataTaskPublisher(for: url)
-			.map(\.data)											// convert the contents of this tuple to another type.
+			.map(\.data)													// convert the contents of this tuple to another type.
 			.decode(type: CharacterPageJson.self, decoder: JSONDecoder())	// convert raw data received to our types (in this case a CharacterPageJson)
-			.eraseToAnyPublisher()
-			.receive(on: DispatchQueue.main)						// receive on the main thread
+			.receive(on: DispatchQueue.main)								// receive on the main thread
 			.handleEvents(receiveOutput: { data in
 				self.characterCount = data.info.count
 				self.canLoadMorePages = data.info.next != nil
-				self.isLoadingPage = false
 				self.currentPage += 1
+			}, receiveCompletion: {_ in
+				self.isLoadingPage = false
 			})
 			.map({ response in
 				// process the user records in the response.data array
@@ -124,6 +116,7 @@ class CharacterListModel: ObservableObject {
 	}
 
 	//_________________________________________________________
+	// called after a character record is created...to load their avatar
 	func requestAvatarForCharacterIndex(_ index: Int) {
 		if index >= self.characters.count {
 			return
