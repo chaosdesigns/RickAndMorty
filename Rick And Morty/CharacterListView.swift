@@ -13,17 +13,21 @@ struct CharacterListView: View {
 	@State private var showingAbout = false
 
 	var body: some View {
+
 		NavigationView {
-			List {
-				ForEach(model.characters) { character in
-					CharacterListCell(character: character)
-						.onAppear() {
-							model.fetchMoreCharactersIfNeeded(currentCharacter: character)
-						}
+			Section(header: CharacterListHeader(total: model.characterCount, loaded: model.characters.count)) {
+				List {
+					ForEach(model.characters) { character in
+						CharacterListCell(character: character)
+							.onAppear() {
+								model.fetchMoreCharactersIfNeeded(currentCharacter: character)
+							}
+					}
 				}
+				.listStyle(PlainListStyle())	// and  GroupedListStyle and InsetListStyle  pushes the left and right boundaries out!
+				.listItemTint(Color.clear)
 			}
-			.listStyle(PlainListStyle())	// and  GroupedListStyle and InsetListStyle  pushes the left and right boundaries out!
-			.listItemTint(Color .clear)
+			.searchable(text: $model.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Find character...")
 			.navigationTitle("Characters")
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
@@ -36,6 +40,19 @@ struct CharacterListView: View {
 		.sheet(isPresented: $showingAbout) {
 			AboutView()
 		}
+	}
+}
+
+// _____________________________________________________________
+struct CharacterListHeader: View {
+	var total: Int
+	var loaded: Int
+
+	var body: some View {
+		Text("\(total) Characters (\(loaded) Loaded)")
+			.font(.body)
+			.foregroundColor(.secondary)
+			.fontWeight(.light)
 	}
 }
 
