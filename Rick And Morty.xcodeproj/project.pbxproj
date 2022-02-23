@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F33E35227C6F2DF00577FAF /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F33E35127C6F2DF00577FAF /* AboutView.swift */; };
 		1FE0080627C54B63006C139F /* Rick_And_MortyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0080527C54B63006C139F /* Rick_And_MortyApp.swift */; };
 		1FE0080A27C54B65006C139F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FE0080927C54B65006C139F /* Assets.xcassets */; };
 		1FE0080D27C54B65006C139F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FE0080C27C54B65006C139F /* Preview Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F33E35127C6F2DF00577FAF /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		1FE0080227C54B63006C139F /* Rick And Morty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rick And Morty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FE0080527C54B63006C139F /* Rick_And_MortyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rick_And_MortyApp.swift; sourceTree = "<group>"; };
 		1FE0080927C54B65006C139F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				1FE0080527C54B63006C139F /* Rick_And_MortyApp.swift */,
+				1F33E35127C6F2DF00577FAF /* AboutView.swift */,
 				1FE0081527C54D1A006C139F /* CharacterListView.swift */,
 				1FE0081327C54D07006C139F /* CharacterListModel.swift */,
 				1FE0081727C5551F006C139F /* CharacterRec.swift */,
@@ -150,6 +153,7 @@
 				1FE0081A27C5771D006C139F /* CharacterProfileView.swift in Sources */,
 				1FE0081627C54D1A006C139F /* CharacterListView.swift in Sources */,
 				1FE0080627C54B63006C139F /* Rick_And_MortyApp.swift in Sources */,
+				1F33E35227C6F2DF00577FAF /* AboutView.swift in Sources */,
 				1FE0081827C5551F006C139F /* CharacterRec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -74,7 +74,7 @@ struct SearchBar: View {
 				model.changeFetchParameters()
 			}) {
 				SFImage(named: "magnifyingglass.circle.fill")
-					.foregroundColor(model.searchText.isEmpty ? .clear : .blue)
+					.foregroundColor(model.searchText.isEmpty ? .clear : .green)
 			}.disabled(model.searchText.isEmpty)
 
 			Button(action: {
@@ -83,7 +83,7 @@ struct SearchBar: View {
 
 			}) {
 				SFImage(named: "xmark.circle.fill")
-					.foregroundColor(model.searchText.isEmpty ? .clear : .blue)
+					.foregroundColor(model.searchText.isEmpty ? .clear : .yellow)
 			}.disabled(model.searchText.isEmpty)
 		}
 		.padding(.horizontal)
@@ -127,48 +127,6 @@ struct CharacterListCell: View {
 				Spacer()
 			}
 		}
-	}
-}
-
-// _____________________________________________________________
-struct AboutView: View {
-	@Environment(\.dismiss) var dismiss
-
-	var body: some View {
-		VStack {
-			Spacer()
-			Text("Rick And Morty App")
-				.font(.largeTitle)
-				.padding()
-
-			Text("Written by Jeff Ferguson")
-				.font(.body)
-				.padding()
-
-			Spacer()
-			Button(action: handleCloseButton ) {
-				CloseButtonView()
-			}
-			.padding()
-		}
-	}
-
-	// ____________
-	func handleCloseButton() {
-		dismiss()
-	}
-}
-
-// _____________________________________________________________
-struct CloseButtonView : View {
-	var body: some View {
-		return Text("Close")
-			.font(.headline)
-			.foregroundColor(.white)
-			.padding()
-			.frame(width: 150, height: 50)
-			.background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .top, endPoint: .bottom))
-			.cornerRadius(15.0)
 	}
 }
 
