@@ -12,39 +12,45 @@ struct CharacterProfileView: View {
 	var character: CharacterRec
 
 	var body: some View {
-		HStack {
-			Spacer()
-			VStack {
+		VStack {
+			IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!, size: 280.0)
+				.padding(.top, 20)
 
-				IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!, size: 280.0)
+			Text("\(character.name)")
+				.font(.title)
+				.fontWeight(.bold)
+				.padding()
 
-				Text("\(character.name)")
-					.font(.body)
-					.fontWeight(.bold)
-					.padding(.horizontal)
-					.padding(.bottom)
-
-				Text(character.status)
-					.font(.body)
-					.padding(.horizontal)
-
-				Text(character.species)
-					.font(.body)
-					.padding(.horizontal)
-
-				Text(character.gender)
-					.font(.body)
-					.padding(.horizontal)
-
-				Text(character.location)
-					.font(.body)
-					.padding(.horizontal)
-
-				Spacer()
-			}
+			InfoView(title: "Status:", value: character.status)
+			InfoView(title: "Species:", value: character.species)
+			InfoView(title: "Gender:", value: character.gender)
+			InfoView(title: "Location:", value: character.location)
 			Spacer()
 		}
 		.navigationTitle("Profile")
+	}
+}
+
+//_________________________________________________________
+struct InfoView: View {
+	var title: String
+	var value: String
+	let leadingColor = Color.green
+	let trailingColor = Color.yellow
+
+	var body: some View {
+		HStack {
+			Text(title)
+				.fontWeight(.bold)
+
+			Spacer()
+
+			Text(value)
+		}
+		.font(.body)
+		.padding(.horizontal, 30)
+		.padding(.vertical, 10)
+		.background(LinearGradient(gradient: Gradient(colors: [leadingColor, trailingColor]), startPoint: .leading, endPoint: .trailing))
 	}
 }
 
