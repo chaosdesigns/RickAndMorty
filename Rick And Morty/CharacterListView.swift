@@ -15,19 +15,38 @@ struct CharacterListView: View {
 	var body: some View {
 
 		NavigationView {
-			Section(header: CharacterListHeader(total: model.characterCount, loaded: model.characters.count)) {
-				List {
-					ForEach(model.characters) { character in
-						CharacterListCell(character: character)
-							.onAppear() {
-								model.fetchMoreCharactersIfNeeded(currentCharacter: character)
-							}
+			VStack {
+				SearchBar(model: model)
+
+				if model.characters.count > 0 {
+					List {
+						ForEach(model.characters) { character in
+							CharacterListCell(character: character)
+								.onAppear() {
+									model.fetchMoreCharactersIfNeeded(currentCharacter: character)
+								}
+						}
 					}
+					.listStyle(PlainListStyle())	// and  GroupedListStyle and InsetListStyle  pushes the left and right boundaries out!
+					.listItemTint(Color.clear)
+
+					CharacterListFooter(total: model.characterCount, loaded: model.characters.count)
+				} else {
+					Spacer()
+					if !model.isLoadingPage {
+						Text("There are no characters matching your search.")
+							.font(.largeTitle)
+							.fontWeight(.light)
+							.foregroundColor(.secondary)
+							.multilineTextAlignment(.center)
+							.padding(.horizontal, 30)
+					} else {
+						ProgressView()
+							.scaleEffect(3)
+					}
+					Spacer()
 				}
-				.listStyle(PlainListStyle())	// and  GroupedListStyle and InsetListStyle  pushes the left and right boundaries out!
-				.listItemTint(Color.clear)
 			}
-			.searchable(text: $model.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Find character...")
 			.navigationTitle("Characters")
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
@@ -44,7 +63,35 @@ struct CharacterListView: View {
 }
 
 // _____________________________________________________________
-struct CharacterListHeader: View {
+struct SearchBar: View {
+	@StateObject var model: CharacterListModel
+
+	var body: some View {
+		HStack {
+			TextField("Search for a character...", text: $model.searchText)
+
+			Button(action: {
+				model.changeFetchParameters()
+			}) {
+				SFImage(named: "magnifyingglass.circle.fill")
+					.foregroundColor(model.searchText.isEmpty ? .clear : .blue)
+			}.disabled(model.searchText.isEmpty)
+
+			Button(action: {
+				model.searchText = ""
+				model.changeFetchParameters()
+
+			}) {
+				SFImage(named: "xmark.circle.fill")
+					.foregroundColor(model.searchText.isEmpty ? .clear : .blue)
+			}.disabled(model.searchText.isEmpty)
+		}
+		.padding(.horizontal)
+	}
+}
+
+// _____________________________________________________________
+struct CharacterListFooter: View {
 	var total: Int
 	var loaded: Int
 
@@ -136,6 +183,18 @@ struct IconView : View {
 			.aspectRatio(contentMode: .fit)
 			.frame(width: size, height: size)
 			.cornerRadius(16)
+	}
+}
+
+//_________________________________________________________
+struct SFImage : View {
+	var named: String
+
+	var body: some View {
+		Image(systemName: named)
+			.resizable()
+			.frame(width: 30, height: 30, alignment: .leading)
+			.padding(.leading, 8)
 	}
 }
 
