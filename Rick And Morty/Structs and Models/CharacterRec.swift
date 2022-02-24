@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 //__________________________________________________________________________
+// this is used to hold a character displayed in the UI
 struct CharacterRec: Identifiable {
 	var id: String = ""
 	var name: String = ""
@@ -22,6 +23,7 @@ struct CharacterRec: Identifiable {
 	var created: Date? = nil
 
 	//__________________________________________________________________________
+	// called to set downloaded data into the UI structs
 	mutating func setFromCharacterJson(characterJson: CharacterJson) {
 		self.id = characterJson.id != 0 ? "\(characterJson.id)" : UUID().uuidString
 		self.name = characterJson.name
@@ -36,6 +38,7 @@ struct CharacterRec: Identifiable {
 }
 
 // structs for mapping incomming json
+// see RickAndMorty.json.txt file for an example
 //__________________________________________________________________________
 struct CharacterJson: Decodable, Identifiable {
 	var id: Int
@@ -74,7 +77,7 @@ struct CharacterPageJson: Decodable {
 
 
 //__________________________________________________________________________
-// create some sample data to play wth
+// create some sample data to play with
 let testCharacters = [
 	CharacterRec(id: "1", name: "Rick Sanchez", status: "Alive", species: "Human", gender: "Male", location: "Citadel of Ricks", episodes: 51, avatar_url: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"),
 	CharacterRec(id: "2", name: "Morty Smith", status: "Alive", species: "Human", gender: "Male", location: "Citadel of Ricks", episodes: 51, avatar_url: "https://rickandmortyapi.com/api/character/avatar/2.jpeg"),

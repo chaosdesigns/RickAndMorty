@@ -11,8 +11,10 @@ import SwiftUI
 
 //_________________________________________________________
 class CharacterListModel: ObservableObject {
-	@Published var characters = [CharacterRec]()
+	@Published var characters = [CharacterRec]()	// our array of characters... extended as the list is scrolled
 	@Published var characterCount = 0
+
+	// some working variables as we page the load
 	@Published var isLoadingPage = false {
 		didSet {
 			if isLoadingPage == false && pendingFetch == true {
@@ -23,6 +25,7 @@ class CharacterListModel: ObservableObject {
 	}
 	@Published var searchText = "" {
 		didSet {
+			// as the user changes the text, we re-trigger the search
 			changeFetchParameters()
 		}
 	}
@@ -92,12 +95,13 @@ class CharacterListModel: ObservableObject {
 		if !self.searchText.isEmpty {
 			urlString += "&name=\(self.searchText)"
 		}
+		// cleanup the URL so we dont crash
 		urlString = urlString.trimmingCharacters(in: .whitespacesAndNewlines)
 		urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-		print("Loading page using url: [\(urlString)]")
+		//print("Loading page using url: [\(urlString)]") // handy debug statement
 
 		guard let url = URL(string: urlString) else {
-			print("BAD URL when Loading page using url: [\(urlString)]")
+			print("BAD URL when Loading page using url: [\(urlString)]")	// no need to FatalError here
 			return
 		}
 
@@ -111,21 +115,21 @@ class CharacterListModel: ObservableObject {
 				self.canLoadMorePages = data.info.next != nil
 				self.currentPage += 1
 			}, receiveCompletion: {_ in
-				self.isLoadingPage = false
+				self.isLoadingPage = false	// clear the loading flag
 			})
 			.map({ response in
 				// process the user records in the response.data array
-				for characterJ in response.results {	// loop through characters loaded (these are CharacterJson recs)
-					var characterInfo = CharacterRec()	// create a character record
+				for characterJ in response.results {						// loop through characters loaded (these are CharacterJson recs)
+					var characterInfo = CharacterRec()						// create a character record
 					characterInfo.setFromCharacterJson(characterJson:characterJ)
-					let nextIndex = self.characters.count // get index of last member of array BEFORE adding the new character
-					self.characters.append(characterInfo)	// add it to our array (in 'nextIndex' position)
-					self.requestAvatarForCharacterIndex(nextIndex)	// request the avatar for it
+					let nextIndex = self.characters.count 					// get index of last member of array BEFORE adding the new character
+					self.characters.append(characterInfo)					// add it to our array (in 'nextIndex' position)
+					self.requestAvatarForCharacterIndex(nextIndex)			// request the avatar for it
 				}
 				return self.characters
 			})
 			.catch({ error in
-				Just(self.characters)	// just once
+				Just(self.characters)	// just the characters
 			})
 			.assign(to: &$characters)
 	}
@@ -134,14 +138,16 @@ class CharacterListModel: ObservableObject {
 	// called after a character record is created...to load their avatar
 	func requestAvatarForCharacterIndex(_ index: Int) {
 		if index >= self.characters.count {
-			return
+			return // make sure any late requests are within our bounds
 		}
 
 		if self.characters[index].avatar != nil {
-			return
+			return	// no need to re-assign... triggering a list update (with potentially an incorrect image)
 		}
 
-		let url = URL(string: self.characters[index].avatar_url)!
+		guard let url = URL(string: self.characters[index].avatar_url) else {
+			return // guard against a bad url in the data... dont want to crash the app
+		}
 		getData(from: url) { optData, response, error in
 			guard let imageData = optData else {
 				return
@@ -152,7 +158,7 @@ class CharacterListModel: ObservableObject {
 				if self != nil && index >= self!.characters.count {
 					return
 				}
-				//convert the return data into an image
+				// convert the return data into an image
 				let uiImage: UIImage? = UIImage(data: imageData)
 				self?.characters[index].avatar = uiImage
 			}
@@ -160,7 +166,8 @@ class CharacterListModel: ObservableObject {
 	}
 
 	//_________________________________________________________
-	func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+	// called from func above (separated out for readability)
+	private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
 		URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
 	}
 

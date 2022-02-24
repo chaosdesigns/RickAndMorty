@@ -21,6 +21,7 @@ struct CharacterListView: View {
 						ForEach(model.characters) { character in
 							CharacterListCell(character: character)
 								.onAppear() {
+									// when the cell appears, fetch more characters from internet, if needed
 									model.fetchMoreCharactersIfNeeded(currentCharacter: character)
 								}
 						}
@@ -31,21 +32,25 @@ struct CharacterListView: View {
 					CharacterListFooter(total: model.characterCount, loaded: model.characters.count)
 				} else {
 					Spacer()
-					if !model.isLoadingPage {
+
+					if model.isLoadingPage {
+						// still loading... show activity sparks
+						ProgressView()
+							.scaleEffect(3)
+					} else {
+						// tell user no records were found
 						Text("There are no characters matching your search.")
 							.font(.largeTitle)
 							.fontWeight(.light)
 							.foregroundColor(.secondary)
 							.multilineTextAlignment(.center)
 							.padding(.horizontal, 30)
-					} else {
-						ProgressView()
-							.scaleEffect(3)
 					}
+
 					Spacer()
 				}
 			}
-			.searchable(text: $model.searchText, prompt: "Find character...")
+			.searchable(text: $model.searchText, prompt: "Find character...")	// use built in search bar
 			.navigationTitle("Characters")
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
@@ -62,7 +67,8 @@ struct CharacterListView: View {
 }
 
 // _____________________________________________________________
-struct CharacterListFooter: View {
+// this was added to help debugging, but I'm gonna keep it because the user might find it useful
+fileprivate struct CharacterListFooter: View {
 	var total: Int
 	var loaded: Int
 
@@ -75,13 +81,13 @@ struct CharacterListFooter: View {
 }
 
 // _____________________________________________________________
-struct CharacterListCell: View {
+fileprivate struct CharacterListCell: View {
 	var character: CharacterRec
 
 	var body: some View {
 		NavigationLink(destination: CharacterProfileView(character: character)) {
 			HStack {
-				IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!  , size: 60.0)
+				RoundedImageView(image: character.avatar, size: 60.0)
 
 				VStack(alignment: .leading) {
 					Text("\(character.name)")
@@ -98,32 +104,6 @@ struct CharacterListCell: View {
 				Spacer()
 			}
 		}
-	}
-}
-
-//_________________________________________________________
-struct IconView : View {
-	var image: UIImage
-	var size: CGFloat
-
-	var body: some View {
-		return Image(uiImage: image)
-			.resizable()
-			.aspectRatio(contentMode: .fit)
-			.frame(width: size, height: size)
-			.cornerRadius(16)
-	}
-}
-
-//_________________________________________________________
-struct SFImage : View {
-	var named: String
-
-	var body: some View {
-		Image(systemName: named)
-			.resizable()
-			.frame(width: 30, height: 30, alignment: .leading)
-			.padding(.leading, 8)
 	}
 }
 

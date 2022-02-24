@@ -13,7 +13,7 @@ struct CharacterProfileView: View {
 
 	var body: some View {
 		VStack {
-			IconView(image: character.avatar ?? UIImage(systemName: "person.circle")!, size: 320.0)
+			RoundedImageView(image: character.avatar, size: 320.0)
 				.padding(.top, 20)
 
 			Text("\(character.name)")
@@ -32,7 +32,7 @@ struct CharacterProfileView: View {
 }
 
 //_________________________________________________________
-struct InfoView: View {
+fileprivate struct InfoView: View {
 	var title: String
 	var value: String
 	let leadingColor = Color.green

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// A simple modal about view
 // _____________________________________________________________
 struct AboutView: View {
 	@Environment(\.dismiss) var dismiss
@@ -14,7 +15,7 @@ struct AboutView: View {
 	var body: some View {
 		VStack {
 			Spacer()
-			IconView(image: UIImage(named: "rick-and-morty")!, size: 300)
+			RoundedImageView(image: UIImage(named: "rick-and-morty"), size: 300)
 			Text("Rick And Morty App")
 				.font(.largeTitle)
 				.padding()
@@ -38,9 +39,9 @@ struct AboutView: View {
 }
 
 // _____________________________________________________________
-struct CloseButtonView : View {
+fileprivate struct CloseButtonView : View {
 	var body: some View {
-		return Text("Close")
+		Text("Close")
 			.font(.headline)
 			.foregroundColor(.black)
 			.padding()
