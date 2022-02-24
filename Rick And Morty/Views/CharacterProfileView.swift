@@ -48,8 +48,9 @@ fileprivate struct InfoView: View {
 			Text(value)
 		}
 		.font(.body)
-		.padding(6)
+		.padding(8)
 		.background(LinearGradient(gradient: Gradient(colors: [leadingColor, trailingColor]), startPoint: .leading, endPoint: .trailing))
+		.cornerRadius(10)
 		.padding(.horizontal, 32)
 	}
 }
