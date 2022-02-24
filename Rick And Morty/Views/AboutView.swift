@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+let aboutTextColor = Color(red: 23/255, green: 177/255, blue: 199/255)
+let aboutShadowColor = Color(red: 39/255, green: 129/255, blue: 116/255)
+
 // A simple modal about view
 // _____________________________________________________________
 struct AboutView: View {
@@ -14,21 +17,28 @@ struct AboutView: View {
 
 	var body: some View {
 		VStack {
-			Spacer()
-			RoundedImageView(image: UIImage(named: "rick-and-morty"), size: 300)
-			Text("Rick And Morty App")
-				.font(.largeTitle)
-				.padding()
+			ZStack {
+			Image(uiImage: UIImage(named: "rick-and-morty-title")!)
+				.resizable()
+				.aspectRatio(contentMode: .fit)
+				.frame(width: 300, height: 120)
 
+			Text("App")
+				.font(.largeTitle)
+				.padding(.top, 80)
+				.foregroundColor(aboutTextColor)
+				.shadow(color: aboutShadowColor, radius: 1)
+			}
 			Text("Written by Jeff Ferguson")
 				.font(.body)
 				.padding()
+				.padding(.bottom, 20)
 
-			Spacer()
 			Button(action: handleCloseButton ) {
 				CloseButtonView()
 			}
 			.padding()
+
 		}
 	}
 
@@ -43,10 +53,10 @@ fileprivate struct CloseButtonView : View {
 	var body: some View {
 		Text("Close")
 			.font(.headline)
-			.foregroundColor(.black)
+			.foregroundColor(.white)
 			.padding()
 			.frame(width: 150, height: 50)
-			.background(LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.green]), startPoint: .top, endPoint: .bottom))
+			.background(LinearGradient(gradient: Gradient(colors: [aboutTextColor, aboutShadowColor]), startPoint: .top, endPoint: .bottom))
 			.cornerRadius(15.0)
 	}
 }
