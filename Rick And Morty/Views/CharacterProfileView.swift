@@ -35,17 +35,19 @@ struct CharacterProfileView: View {
 fileprivate struct InfoView: View {
 	var title: String
 	var value: String
-	let leadingColor = Color.green
-	let trailingColor = Color.yellow
+	let leadingColor = Color("AboutTextColor")
+	let trailingColor = Color("AboutShadowColor")
 
 	var body: some View {
 		HStack {
 			Text(title)
+				.foregroundColor(.white)
 				.fontWeight(.bold)
 
 			Spacer()
 
 			Text(value)
+				.foregroundColor(.white)
 		}
 		.font(.body)
 		.padding(8)
