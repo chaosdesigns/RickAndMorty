@@ -87,7 +87,7 @@ fileprivate struct CharacterListCell: View {
 	var body: some View {
 		NavigationLink(destination: CharacterProfileView(character: character)) {
 			HStack {
-				RoundedImageView(image: character.avatar, size: 60.0)
+				CharacterAvatarView(image: character.avatar, size: 60.0)
 
 				VStack(alignment: .leading) {
 					Text("\(character.name)")

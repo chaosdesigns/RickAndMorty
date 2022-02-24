@@ -1,5 +1,5 @@
 //
-//  RoundedImageView.swift
+//  CharacterAvatarView.swift
 //  Rick And Morty
 //
 //  Created by Jeff Ferguson on 2022-02-24.
@@ -9,7 +9,7 @@ import SwiftUI
 
 // a commonly used image view
 //_________________________________________________________
-struct RoundedImageView : View {
+struct CharacterAvatarView : View {
 	var image: UIImage?
 	var size: CGFloat
 

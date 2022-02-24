@@ -13,7 +13,7 @@ struct CharacterProfileView: View {
 
 	var body: some View {
 		VStack {
-			RoundedImageView(image: character.avatar, size: 320.0)
+			CharacterAvatarView(image: character.avatar, size: 320.0)
 				.padding(.top, 20)
 
 			Text("\(character.name)")
