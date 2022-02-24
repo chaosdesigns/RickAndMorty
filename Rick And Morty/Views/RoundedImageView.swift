@@ -14,7 +14,7 @@ struct RoundedImageView : View {
 	var size: CGFloat
 
 	var body: some View {
-		return Image(uiImage: image ?? UIImage(systemName: "person.circle")!)
+		Image(uiImage: image ?? UIImage(named: "rickandmortysilouette")!)
 			.resizable()
 			.aspectRatio(contentMode: .fit)
 			.frame(width: size, height: size)
