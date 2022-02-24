@@ -16,8 +16,6 @@ struct CharacterListView: View {
 
 		NavigationView {
 			VStack {
-				SearchBar(model: model)
-
 				if model.characters.count > 0 {
 					List {
 						ForEach(model.characters) { character in
@@ -47,6 +45,7 @@ struct CharacterListView: View {
 					Spacer()
 				}
 			}
+			.searchable(text: $model.searchText, prompt: "Find character...")
 			.navigationTitle("Characters")
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
@@ -59,34 +58,6 @@ struct CharacterListView: View {
 		.sheet(isPresented: $showingAbout) {
 			AboutView()
 		}
-	}
-}
-
-// _____________________________________________________________
-struct SearchBar: View {
-	@StateObject var model: CharacterListModel
-
-	var body: some View {
-		HStack {
-			TextField("Search for a character...", text: $model.searchText)
-
-			Button(action: {
-				model.changeFetchParameters()
-			}) {
-				SFImage(named: "magnifyingglass.circle.fill")
-					.foregroundColor(model.searchText.isEmpty ? .clear : .green)
-			}.disabled(model.searchText.isEmpty)
-
-			Button(action: {
-				model.searchText = ""
-				model.changeFetchParameters()
-
-			}) {
-				SFImage(named: "xmark.circle.fill")
-					.foregroundColor(model.searchText.isEmpty ? .clear : .yellow)
-			}.disabled(model.searchText.isEmpty)
-		}
-		.padding(.horizontal)
 	}
 }
 

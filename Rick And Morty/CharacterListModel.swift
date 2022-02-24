@@ -13,8 +13,20 @@ import SwiftUI
 class CharacterListModel: ObservableObject {
 	@Published var characters = [CharacterRec]()
 	@Published var characterCount = 0
-	@Published var isLoadingPage = false
-	@Published var searchText = ""
+	@Published var isLoadingPage = false {
+		didSet {
+			if isLoadingPage == false && pendingFetch == true {
+				// trigger the pending fetch
+				changeFetchParameters()
+			}
+		}
+	}
+	@Published var searchText = "" {
+		didSet {
+			changeFetchParameters()
+		}
+	}
+	private var pendingFetch = false;
 	private var currentPage = 0
 	private var canLoadMorePages = true
 
@@ -30,8 +42,11 @@ class CharacterListModel: ObservableObject {
 	// characters that match the user's search parameter
 	func changeFetchParameters() {
 		guard !isLoadingPage else {
+			// remember that we want to fetch (as soon as the current one is done)
+			self.pendingFetch = true
 			return
 		}
+		self.pendingFetch = false			// we are fetching, so clear pending flag
 		self.characters = [CharacterRec]()
 		self.characterCount = 0
 		self.currentPage = 0
